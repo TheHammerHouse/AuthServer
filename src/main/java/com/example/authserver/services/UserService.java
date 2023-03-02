@@ -4,6 +4,7 @@ import com.example.authserver.dtos.CreateUserDTO;
 import com.example.authserver.dtos.UserDTO;
 import com.example.authserver.entities.User;
 import com.example.authserver.repositories.IUserRepository;
+import com.example.authserver.utilities.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class UserService {
 
     private final IUserRepository userRepository;
+    private final AuthUtil authUtil;
 
     @Autowired
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, AuthUtil authUtil) {
         this.userRepository = userRepository;
+        this.authUtil = authUtil;
     }
 
     public UserDTO createUser(CreateUserDTO createUserDTO) {
@@ -32,7 +35,11 @@ public class UserService {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(createUserDTO, user);
 
-        // TODO Add logic for password hashing and salting.
+        String salt = authUtil.generateSalt();
+        String hashedAndSaltedPassword = authUtil.hashAndSaltPassword(createUserDTO.getPassword(), salt);
+
+        user.setSalt(salt);
+        user.setPassword(hashedAndSaltedPassword);
 
         userRepository.save(user);
 
