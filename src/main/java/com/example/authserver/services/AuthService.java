@@ -2,7 +2,6 @@ package com.example.authserver.services;
 
 import com.example.authserver.dtos.LoginDTO;
 import com.example.authserver.dtos.TokenDTO;
-import com.example.authserver.dtos.UserDTO;
 import com.example.authserver.entities.User;
 import com.example.authserver.utilities.AuthUtil;
 import com.example.authserver.utilities.JWTUtil;
