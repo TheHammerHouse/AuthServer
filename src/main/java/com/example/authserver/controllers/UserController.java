@@ -4,12 +4,11 @@ import com.example.authserver.dtos.CreateUserDTO;
 import com.example.authserver.dtos.UserDTO;
 import com.example.authserver.entities.User;
 import com.example.authserver.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value="/user")
@@ -24,7 +23,25 @@ public class UserController {
 
     @PostMapping(value = "")
     public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO createUserDTO) {
-        UserDTO userDTO = userService.createUser(createUserDTO);
+        User user = userService.createUser(createUserDTO);
+
+        UserDTO userDTO = new UserDTO();
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(user, userDTO);
+
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping(value = "")
+    public ResponseEntity<UserDTO> getUserByUserName(@RequestParam String userName) {
+        User user = userService.getUserByUserName(userName);
+
+        UserDTO userDTO = new UserDTO();
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(user, userDTO);
+
         return ResponseEntity.ok(userDTO);
     }
 }

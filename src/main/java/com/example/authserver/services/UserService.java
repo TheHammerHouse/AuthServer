@@ -24,7 +24,7 @@ public class UserService {
         this.authUtil = authUtil;
     }
 
-    public UserDTO createUser(CreateUserDTO createUserDTO) {
+    public User createUser(CreateUserDTO createUserDTO) {
         Optional<User> userOptional = userRepository.findByUserName(createUserDTO.getUserName());
         if (userOptional.isPresent()) {
             // TODO Add more granular exceptions.
@@ -44,10 +44,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        UserDTO userDTO = new UserDTO();
-        modelMapper.map(user, userDTO);
-
-        return userDTO;
+        return user;
     }
 
     public User getUserByUserName(String userName) {
@@ -56,6 +53,7 @@ public class UserService {
             // TODO Add more granular exceptions.
             throw new RuntimeException("Could not find user with that username.");
         }
+
         return userOptional.get();
     }
 }
