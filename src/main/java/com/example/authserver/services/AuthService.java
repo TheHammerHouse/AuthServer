@@ -27,9 +27,12 @@ public class AuthService {
     public TokenDTO login(LoginDTO loginDTO) {
         String userName = loginDTO.getUserName();
         User user = userService.getUserByUserName(userName);
-        boolean passwordsMatch =
-                authUtil.hashAndSaltPassword(user.getPassword(), user.getSalt()).equals(loginDTO.getPassword());
-        if (!passwordsMatch) {
+
+        String salt = user.getSalt();
+        String expectedHashedPassword = user.getPassword();
+        String hashedPassword = authUtil.hashAndSaltPassword(loginDTO.getPassword(), salt);
+
+        if (!hashedPassword.equals(expectedHashedPassword)) {
             // TODO Add more granular exceptions.
             throw new RuntimeException("Invalid Credentials");
         }
