@@ -3,7 +3,7 @@ package com.example.authserver.dtos;
 import lombok.Data;
 
 @Data
-public final class UserDTO {
+public class UserDTO {
     private int id;
     private String firstName;
     private String lastName;
