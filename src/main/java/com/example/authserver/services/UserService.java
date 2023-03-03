@@ -2,6 +2,8 @@ package com.example.authserver.services;
 
 import com.example.authserver.dtos.CreateUserDTO;
 import com.example.authserver.entities.User;
+import com.example.authserver.exceptions.AccountExistsException;
+import com.example.authserver.exceptions.UserNotFoundException;
 import com.example.authserver.repositories.IUserRepository;
 import com.example.authserver.utilities.AuthUtil;
 import org.modelmapper.ModelMapper;
@@ -25,8 +27,7 @@ public class UserService {
     public User createUser(CreateUserDTO createUserDTO) {
         Optional<User> userOptional = userRepository.findByUserName(createUserDTO.getUserName());
         if (userOptional.isPresent()) {
-            // TODO Add more granular exceptions.
-            throw new RuntimeException("User already exists");
+            throw new AccountExistsException("A user with this username already exists.");
         }
 
         User user = new User();
@@ -48,8 +49,7 @@ public class UserService {
     public User getUserByUserName(String userName) {
         Optional<User> userOptional = userRepository.findByUserName(userName);
         if (userOptional.isEmpty()) {
-            // TODO Add more granular exceptions.
-            throw new RuntimeException("Could not find user with that username.");
+            throw new UserNotFoundException("Could not find user with that username.");
         }
 
         return userOptional.get();

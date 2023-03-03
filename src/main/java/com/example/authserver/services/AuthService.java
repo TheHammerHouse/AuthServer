@@ -3,6 +3,7 @@ package com.example.authserver.services;
 import com.example.authserver.dtos.LoginDTO;
 import com.example.authserver.dtos.TokenDTO;
 import com.example.authserver.entities.User;
+import com.example.authserver.exceptions.InvalidCredentialsException;
 import com.example.authserver.utilities.AuthUtil;
 import com.example.authserver.utilities.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,7 @@ public class AuthService {
         String hashedPassword = authUtil.hashAndSaltPassword(loginDTO.getPassword(), salt);
 
         if (!hashedPassword.equals(expectedHashedPassword)) {
-            // TODO Add more granular exceptions.
-            throw new RuntimeException("Invalid Credentials");
+            throw new InvalidCredentialsException("Invalid credentials. Please try again.");
         }
         String authToken = jwtUtil.generateAuthToken(userName);
 

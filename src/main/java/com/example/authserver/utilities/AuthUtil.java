@@ -41,7 +41,6 @@ public class AuthUtil {
             return Base64.getEncoder().encodeToString(encodedHash);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            // TODO Add more granular exception.
             throw new RuntimeException(e.getMessage());
         }
     }
