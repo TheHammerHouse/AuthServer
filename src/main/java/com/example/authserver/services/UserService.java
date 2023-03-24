@@ -54,4 +54,13 @@ public class UserService {
 
         return userOptional.get();
     }
+
+    public User getUserById(int userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("Could not find user with that ID.");
+        }
+
+        return userOptional.get();
+    }
 }
